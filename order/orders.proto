@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service OrderService {
+    rpc Insert (Order) returns (Order) {}
+}
+
+message Order {
+    reserved 2,3,4;
+    reserved "name","age","address";
+    string id = 1;
+    string productId = 5;
+    string customerId = 6;
+}

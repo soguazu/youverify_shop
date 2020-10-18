@@ -1,0 +1,113 @@
+version: '3.7'
+
+services:
+  api: &api
+    build:
+      dockerfile: Dockerfile
+      context: ./api
+    volumes:
+      - /app/node_modules
+      - ./api:/app
+    ports:
+      - 8080:8080
+    env_file:
+      - ./api/.env
+    depends_on:
+      - customer
+      - product
+      - order
+    links:
+      - customer
+      - product
+      - order
+
+  mongodb:
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017
+
+  rabbitmq:
+    image: rabbitmq:3.6-management-alpine
+    volumes:
+      - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+      - ./rabbitmq/logs:/var/log/rabbitmq/log
+    ports:
+      - '5673:5672'
+      - '15673:15672'
+
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:15673']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  customer:
+    build:
+      dockerfile: Dockerfile
+      context: ./customer
+    ports:
+      - 30043:30043
+    volumes:
+      - /app/node_modules
+      - ./customer:/app
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+
+  order:
+    build:
+      dockerfile: Dockerfile
+      context: ./order
+    ports:
+      - 30044:30044
+    volumes:
+      - /app/node_modules
+      - ./order:/app
+    depends_on:
+      - mongodb
+      - payment
+      - rabbitmq
+    links:
+      - mongodb
+      - payment
+      - rabbitmq
+
+  product:
+    build:
+      dockerfile: Dockerfile
+      context: ./product
+    ports:
+      - 30045:30045
+    volumes:
+      - /app/node_modules
+      - ./product:/app
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+
+  payment:
+    build:
+      dockerfile: Dockerfile
+      context: ./payment
+    ports:
+      - 8081:8081
+    volumes:
+      - /app/node_modules
+      - ./payment:/app
+    restart: on-failure
+    depends_on:
+      - mongodb
+      - rabbitmq
+    links:
+      - mongodb
+      - rabbitmq
+
+volumes:
+  mongo_data: ~
