@@ -1,0 +1,352 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "E-commerce Project",
+    "description": "E-commerce API Documentation",
+    "license": { "name": "MIT", "url": "https://opensource.org/licenses/MIT" }
+  },
+  "host": "localhost:8080",
+  "basePath": "/api/v1/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/customer": {
+      "post": {
+        "tags": ["Customer"],
+        "summary": "Create a single customer in system",
+        "description": "Create new customer in the system",
+        "parameters": [
+          {
+            "name": "customer",
+            "in": "body",
+            "description": "Customer object to be created",
+            "schema": { "$ref": "#/definitions/Customer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/Customer" }
+          },
+          "400": { "description": "Bad request" },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      }
+    },
+    "/customer/{id}": {
+      "get": {
+        "tags": ["Customer"],
+        "summary": "Get a single customer from the system",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer ID",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "properties": {
+                    "_id": { "type": "string", "format": "uuid" }
+                  }
+                },
+                { "$ref": "#/definitions/Customer" }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": { "status": "404", "message": "Not found" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Customer"],
+        "summary": "Update a single customer in the system",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer ID",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "in": "body",
+            "name": "user",
+            "description": "The customer to create.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "email",
+                "address",
+                "phone",
+                "state",
+                "country"
+              ],
+              "$ref": "#/definitions/Customer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "status": 200,
+              "message": "Customer deleted successfully"
+            }
+          },
+          "400": { "description": "Bad request" },
+          "404": {
+            "description": "Not found",
+            "examples": { "status": "404", "message": "Not found" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Customer"],
+        "summary": "Delete a single customer from the system",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Customer ID",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "status": 200,
+              "message": "Customer deleted successfully"
+            }
+          },
+          "400": { "description": "Bad request" },
+          "404": {
+            "description": "Not found",
+            "examples": { "status": "404", "message": "Not found" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      }
+    },
+    "/order": {
+      "post": {
+        "tags": ["Order"],
+        "summary": "Create a single customers in system",
+        "description": "Create new customer in system",
+        "parameters": [
+          {
+            "name": "customer",
+            "in": "body",
+            "description": "Order to be created",
+            "schema": { "$ref": "#/definitions/Order" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/Order" }
+          },
+          "400": { "description": "Bad request" },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      }
+    },
+    "/product": {
+      "post": {
+        "tags": ["Product"],
+        "summary": "Create a single product in system",
+        "description": "Create new product in the system",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "body",
+            "description": "Product object to be created",
+            "schema": { "$ref": "#/definitions/Product" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "$ref": "#/definitions/Product" }
+          },
+          "400": { "description": "Bad request" },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Get a single Product from the system",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "properties": {
+                    "_id": { "type": "string", "format": "uuid" }
+                  }
+                },
+                { "$ref": "#/definitions/Product" }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "examples": { "status": "404", "message": "Not found" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Product"],
+        "summary": "Update a single product in the system",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "in": "body",
+            "name": "user",
+            "description": "The product to create.",
+            "schema": {
+              "type": "object",
+              "required": ["name"],
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": { "status": "200", "message": "Product created" }
+          },
+          "400": { "description": "Bad request" },
+          "404": {
+            "description": "Not found",
+            "examples": { "status": "404", "message": "Not found" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Product"],
+        "summary": "Delete a single product from the system",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "examples": {
+              "status": "200",
+              "message": "Product deleted successfully"
+            }
+          },
+          "400": { "description": "Bad request" },
+          "404": {
+            "description": "Not found",
+            "examples": { "status": "404", "message": "Not found" }
+          },
+          "500": {
+            "description": "Internal server error",
+            "examples": { "status": "500", "message": "Internal server error" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Customer": {
+      "properties": {
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "state": { "type": "string" },
+        "country": { "type": "string" }
+      }
+    },
+    "Order": {
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "productId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    },
+    "Product": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
